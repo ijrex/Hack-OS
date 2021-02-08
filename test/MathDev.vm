@@ -182,3 +182,55 @@ goto WHILE_EXP0
 label WHILE_END0
 push local 0
 return
+function MathDev.divide 2
+push argument 0
+push constant 0
+lt
+push argument 1
+or
+push constant 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push argument 1
+push argument 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push argument 0
+push argument 1
+push argument 1
+add
+call MathDev.divide 2
+pop local 0
+push local 0
+push local 0
+add
+pop local 1
+push argument 0
+push local 1
+push argument 1
+call Math.multiply 2
+sub
+push argument 1
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 1
+return
+goto IF_END2
+label IF_FALSE2
+push local 1
+push constant 1
+add
+return
+label IF_END2

@@ -7,9 +7,16 @@ class Main {
 
     function void main() {
         do MathDev.init();
-        do Output.printInt(MathDev.multiply(1,4));
         do Output.println();
         do Output.printInt(MathDev.multiply(4,1));
+        do Output.println();
+        do Output.printInt(MathDev.divide(2, 0));
+        do Output.println();
+        do Output.printInt(MathDev.divide(8, 4));
+        do Output.println();
+        do Output.printInt(MathDev.divide(10, 2));
+        do Output.println();
+        do Output.printInt(MathDev.divide(-1, 5));
         do Output.println();
         do Output.printString("Done");
         return;

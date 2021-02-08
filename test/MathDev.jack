@@ -60,5 +60,32 @@ class MathDev {
 
     return sum;
   }
+
+  /** Returns the integer part of x/y.
+    *  When a Jack compiler detects the multiplication operator '/' in the
+    *  program's code, it handles it by invoking this method. In other words,
+    *  the Jack expressions x/y and divide(x,y) return the same value.
+    */
+  function int divide(int x, int y) {
+    var int q, q2;
+
+    if ((x < 0) | (y < 1)) {
+      return 0;
+    }
+
+    if (y > x) {
+      return 0;
+    }
+
+    let q = MathDev.divide(x, y + y);
+    let q2 = q + q;
+
+    if ((x - (q2 * y)) < y) {
+      return q2;
+    } else {
+      return q2 + 1;
+    }
+  }
+
 }
 
