@@ -38,6 +38,14 @@ class MathDev {
     return ~((x & twoToThe[j]) = 0);
   }
 
+  /** Returns the absolute value of x. */
+  function int abs(int x) {
+    if (x < 0) {
+      let x = -x;
+    }
+    return x;
+  }
+
   /** Returns the product of x and y.
   *  When a Jack compiler detects the multiplication operator '*' in the
   *  program's code, it handles it by invoking this method. In other words,

@@ -146,6 +146,19 @@ push constant 0
 eq
 not
 return
+function MathDev.abs 0
+push argument 0
+push constant 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+neg
+pop argument 0
+label IF_FALSE0
+push argument 0
+return
 function MathDev.multiply 3
 push constant 0
 pop local 0
@@ -187,9 +200,9 @@ push argument 0
 push constant 0
 lt
 push argument 1
-or
 push constant 1
 lt
+or
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
