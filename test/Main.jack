@@ -7,12 +7,16 @@ class Main {
 
     function void main() {
         do MathDev.init();
+        do Output.printInt(MathDev.sqrt(16));
         do Output.println();
-        do Output.printInt(MathDev.max(4, 2));
+        do Output.printInt(MathDev.sqrt(4));
         do Output.println();
-        do Output.printInt(MathDev.min(4, 2));
+        do Output.printInt(MathDev.sqrt(25));
         do Output.println();
-        do Output.printString("Done");
+        do Output.printInt(MathDev.sqrt(49));
+        do Output.println();
+        do Output.printInt(MathDev.sqrt(2041));
+        do Output.println();
         return;
     }
 }

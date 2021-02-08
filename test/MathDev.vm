@@ -247,6 +247,50 @@ push constant 1
 add
 return
 label IF_END2
+function MathDev.sqrt 4
+push constant 0
+pop local 0
+push constant 8
+pop local 1
+label WHILE_EXP0
+push local 1
+push constant 0
+gt
+not
+if-goto WHILE_END0
+push local 0
+push local 1
+push constant 1
+sub
+push static 0
+add
+pop pointer 1
+push that 0
+add
+pop local 2
+push local 2
+push local 2
+call Math.multiply 2
+pop local 3
+push local 3
+push argument 0
+push constant 1
+add
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 2
+pop local 0
+label IF_FALSE0
+push local 1
+push constant 1
+sub
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+return
 function MathDev.max 0
 push argument 0
 push argument 1

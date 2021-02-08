@@ -95,6 +95,26 @@ class MathDev {
     }
   }
 
+  /** Returns the integer part of the square root of x. */
+  function int sqrt(int x) {
+    var int y, j, prod, prodSqrd;
+
+    let y = 0;
+    let j = 8;
+
+    while(j > 0) {
+      let prod = y + twoToThe[j - 1];
+      let prodSqrd = prod * prod;
+
+      if(prodSqrd < (x + 1)) {
+        let y = prod;
+      }
+
+      let j = j - 1;
+    }
+    return y;
+  }
+
   /** Returns the greater number. */
   function int max(int a, int b) {
     if(a > b){
