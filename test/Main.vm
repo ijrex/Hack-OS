@@ -4,15 +4,18 @@ pop temp 0
 call Output.println 0
 pop temp 0
 push constant 4
-neg
-call MathDev.abs 1
+push constant 2
+call MathDev.max 2
 call Output.printInt 1
 pop temp 0
 call Output.println 0
 pop temp 0
 push constant 4
-call MathDev.abs 1
+push constant 2
+call MathDev.min 2
 call Output.printInt 1
+pop temp 0
+call Output.println 0
 pop temp 0
 push constant 4
 call String.new 1

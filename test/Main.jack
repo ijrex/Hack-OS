@@ -8,9 +8,10 @@ class Main {
     function void main() {
         do MathDev.init();
         do Output.println();
-        do Output.printInt(MathDev.abs(-4));
+        do Output.printInt(MathDev.max(4, 2));
         do Output.println();
-        do Output.printInt(MathDev.abs(4));
+        do Output.printInt(MathDev.min(4, 2));
+        do Output.println();
         do Output.printString("Done");
         return;
     }
