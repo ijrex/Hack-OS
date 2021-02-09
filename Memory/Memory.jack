@@ -7,13 +7,16 @@
  * This library provides two services: direct access to the computer's main
  * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
  * consists of 32,768 words, each holding a 16-bit binary number.
+ * Jack Computer Heap Addresses - 2048 - 16383
  */
 class Memory {
     static Array memory;
+    static int free;
 
     /** Initializes the class. */
     function void init() {
         let memory = 0;
+        let free = 2048;
         return;
     }
 
@@ -31,7 +34,10 @@ class Memory {
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
-        return 0;
+        var int pointer;
+        let pointer = free;
+        let free = free + size;
+        return pointer;
     }
 
     /** De-allocates the given object (cast as an array) by making

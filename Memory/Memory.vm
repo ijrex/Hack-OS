@@ -1,6 +1,8 @@
 function Memory.init 0
 push constant 0
 pop static 0
+push constant 2048
+pop static 1
 push constant 0
 return
 function Memory.peek 0
@@ -21,8 +23,14 @@ push temp 0
 pop that 0
 push constant 0
 return
-function Memory.alloc 0
-push constant 0
+function Memory.alloc 1
+push static 1
+pop local 0
+push static 1
+push argument 0
+add
+pop static 1
+push local 0
 return
 function Memory.deAlloc 0
 push constant 0
