@@ -8,10 +8,18 @@ class Main {
 
     /** Performs various memory manipulations. */
     function void main() {
-        do Memory.alloc(3);
-        do Memory.alloc(2);
-        do Memory.alloc(10);
-        do Memory.alloc(1);
+        var int a, b, c, d;
+
+        let a = Memory.alloc(2);
+        let b = Memory.alloc(3);
+        let c = Memory.alloc(4);
+
+        do Memory.deAlloc(b);
+
+        let d = Memory.alloc(3);
+
+        do Memory.deAlloc(a);
+        do Memory.deAlloc(c);
 
         return;
     }
