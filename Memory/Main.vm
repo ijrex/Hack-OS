@@ -1,4 +1,4 @@
-function Main.main 4
+function Main.main 7
 push constant 2
 call Memory.alloc 1
 pop local 0
@@ -18,6 +18,18 @@ push local 0
 call Memory.deAlloc 1
 pop temp 0
 push local 2
+call Memory.deAlloc 1
+pop temp 0
+push constant 10
+call Memory.alloc 1
+pop local 4
+push constant 4
+call Memory.alloc 1
+pop local 5
+push constant 90
+call Memory.alloc 1
+pop local 6
+push local 6
 call Memory.deAlloc 1
 pop temp 0
 push constant 0

@@ -11,13 +11,12 @@
  */
 class Memory {
     static Array memory, freeList;
-    static int NEXT, LENGTH, SEGMENT_SIZE, HEAP_BASE, HEAP_END;
+    static int NEXT, LENGTH, HEAP_BASE, HEAP_END;
 
     /** Initializes the class. */
     function void init() {
         let LENGTH = 0;
         let NEXT = 1;
-        let SEGMENT_SIZE = -1;
         let HEAP_BASE = 2048;
         let HEAP_END = 16384;
 
@@ -41,59 +40,45 @@ class Memory {
         return;
     }
 
-    function int firstFit(int blockSize) {
-        var Array foundBlock;
+    /** Searches freeList for exact match or tries
+     *  to allocate space inside freeList end segment */
+    function int firstFit(Array curBlock, Array prevBlock, int allocSize) {
 
-        let foundBlock = freeList;
-
-        if (freeList[NEXT] = null) {
-            return foundBlock;
-        }
-
-        if (blockSize < freeList[LENGTH]) {
-            return foundBlock;
-        }
-
-
-        while (~(foundBlock[NEXT] = null)) {
-            let foundBlock = foundBlock[NEXT];
-
-            if(blockSize < foundBlock[LENGTH]) {
-                return foundBlock;
+        // 1. Last freeList segment reached,
+        //    try to allocate memory block in segment
+        if (curBlock[NEXT] = null) {
+            if (allocSize < curBlock[LENGTH]) {
+                return Memory.allocBlock(curBlock, allocSize);
             }
+
+            // Out of memory
+            do Sys.halt();
+            return null;
         }
 
-        // no blocks found
-        // try to fill freeList
+        // 2. Empty freeList segment with matching size found,
+        //    decomission segment and return block address
+        if(allocSize = curBlock[LENGTH]) {
+            do Memory.decomissionBlock(curBlock, prevBlock);
+            return curBlock;
+        }
 
-
-        return 0;
+        // 3. Loop
+        return Memory.firstFit(curBlock[NEXT], curBlock, allocSize);
     }
 
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
-        var Array foundBlock, allocBlock;
-        var int blockSize, j;
+        var Array allocBlock;
+        var int blockSize;
 
         let blockSize = size + 1;
 
-        let foundBlock = Memory.firstFit(blockSize);
+        let allocBlock = Memory.firstFit(freeList, null, blockSize);
 
-        // assign size into foundBlock
-        let allocBlock = foundBlock + foundBlock[LENGTH] - blockSize;
-        let allocBlock[LENGTH] = blockSize;
-
-        // reduce found block length
-        let foundBlock[LENGTH] = foundBlock[LENGTH] - blockSize;
-
-        // temp - fill alloc block during development
-        //        to simulate memory being filled
-        let j = size;
-        while (j > 0) {
-            do Memory.poke(allocBlock + j, 1);
-            let j = j - 1;
-        }
+        // @todo: for development only
+        do Memory.fillBlockMemory(allocBlock, size);
 
         return allocBlock + 1;
     }
@@ -108,6 +93,42 @@ class Memory {
 
         let freeList[NEXT] = pushedFreeList;
 
+        return;
+    }
+
+    // Helper functions
+
+    /** Allocate a memory block inside an empty segment */
+    function Array allocBlock(Array segment, int blockSize) {
+        var Array allocBlock;
+
+        let allocBlock = segment + segment[LENGTH] - blockSize;
+        let allocBlock[LENGTH] = blockSize;
+
+        let segment[LENGTH] = segment[LENGTH] - blockSize;
+
+        return allocBlock;
+    }
+
+    /** Convert a memory block to available segment in freeList */
+    function void decomissionBlock(Array block, Array prevBlock) {
+        if(block = freeList) {
+            let freeList = freeList[NEXT];
+        } else {
+            let prevBlock[NEXT] = block[NEXT];
+        }
+        return;
+    }
+
+    /** @todo: for development, fill block with 1s */
+    function void fillBlockMemory(Array block, int size) {
+        var int j;
+
+        let j = size;
+        while (j > 0) {
+            do Memory.poke(block + j, 1);
+            let j = j - 1;
+        }
         return;
     }
 }
