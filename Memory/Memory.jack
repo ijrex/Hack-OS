@@ -7,28 +7,128 @@
  * This library provides two services: direct access to the computer's main
  * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
  * consists of 32,768 words, each holding a 16-bit binary number.
- */ 
+ * Jack Computer Heap Addresses - 2048 - 16383
+ */
 class Memory {
+    static Array memory, freeList;
+    static int NEXT, LENGTH, HEAP_BASE, HEAP_END;
 
     /** Initializes the class. */
     function void init() {
+        let LENGTH = 0;
+        let NEXT = 1;
+        let HEAP_BASE = 2048;
+        let HEAP_END = 16384;
+
+        let memory = 0;
+
+        let freeList = HEAP_BASE;
+        let freeList[LENGTH] = HEAP_END - HEAP_BASE;
+        let freeList[NEXT] = null;
+
+        return;
     }
 
     /** Returns the RAM value at the given address. */
     function int peek(int address) {
+        return memory[address];
     }
 
     /** Sets the RAM value at the given address to the given value. */
     function void poke(int address, int value) {
+        let memory[address] = value;
+        return;
+    }
+
+    /** Searches freeList for exact match or tries
+     *  to allocate space inside freeList end segment */
+    function int firstFit(Array curBlock, Array prevBlock, int allocSize) {
+
+        // 1. Last freeList segment reached,
+        //    try to allocate memory block in segment
+        if (curBlock[NEXT] = null) {
+            if (allocSize < curBlock[LENGTH]) {
+                return Memory.allocBlock(curBlock, allocSize);
+            }
+
+            // Out of memory
+            do Sys.halt();
+            return null;
+        }
+
+        // 2. Empty freeList segment with matching size found,
+        //    decomission segment and return block address
+        if(allocSize = curBlock[LENGTH]) {
+            do Memory.decomissionBlock(curBlock, prevBlock);
+            return curBlock;
+        }
+
+        // 3. Loop
+        return Memory.firstFit(curBlock[NEXT], curBlock, allocSize);
     }
 
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
+        var Array allocBlock;
+        var int blockSize;
+
+        let blockSize = size + 1;
+
+        let allocBlock = Memory.firstFit(freeList, null, blockSize);
+
+        // @todo: for development only
+        do Memory.fillBlockMemory(allocBlock, size);
+
+        return allocBlock + 1;
     }
 
     /** De-allocates the given object (cast as an array) by making
      *  it available for future allocations. */
-    function void deAlloc(Array o) {
-    }    
+    function void deAlloc(Array obj) {
+        var int pushedFreeList;
+
+        let pushedFreeList = freeList;
+        let freeList = obj - 1;
+
+        let freeList[NEXT] = pushedFreeList;
+
+        return;
+    }
+
+    // Helper functions
+
+    /** Allocate a memory block inside an empty segment */
+    function Array allocBlock(Array segment, int blockSize) {
+        var Array allocBlock;
+
+        let allocBlock = segment + segment[LENGTH] - blockSize;
+        let allocBlock[LENGTH] = blockSize;
+
+        let segment[LENGTH] = segment[LENGTH] - blockSize;
+
+        return allocBlock;
+    }
+
+    /** Convert a memory block to available segment in freeList */
+    function void decomissionBlock(Array block, Array prevBlock) {
+        if(block = freeList) {
+            let freeList = freeList[NEXT];
+        } else {
+            let prevBlock[NEXT] = block[NEXT];
+        }
+        return;
+    }
+
+    /** @todo: for development, fill block with 1s */
+    function void fillBlockMemory(Array block, int size) {
+        var int j;
+
+        let j = size;
+        while (j > 0) {
+            do Memory.poke(block + j, 1);
+            let j = j - 1;
+        }
+        return;
+    }
 }
