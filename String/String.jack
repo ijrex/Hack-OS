@@ -36,24 +36,25 @@ class String {
 
     /** Returns the current length of this string. */
     method int length() {
-        return 0;
+        return len;
     }
 
     /** Returns the character at the j-th location of this string. */
     method char charAt(int j) {
-        return 130;
+        return chars[j];
     }
 
     /** Sets the character at the j-th location of this string to c. */
     method void setCharAt(int j, char c) {
+        let chars[j] = c;
         return;
     }
 
     /** Appends c to this string's end and returns this string. */
     method String appendChar(char c) {
         if (len < maxLen) {
-            let len = len + 1;
             let chars[len] = c;
+            let len = len + 1;
         }
 
         return this;
@@ -61,33 +62,74 @@ class String {
 
     /** Erases the last character from this string. */
     method void eraseLastChar() {
+        let chars[len] = null;
+        let len = len - 1;
         return;
     }
 
     /** Returns the integer value of this string,
      *  until a non-digit character is detected. */
     method int intValue() {
-        return 0;
+        var int val, i, fin, exp;
+
+        let val = 0;
+        let i = len;
+        let exp = 1;
+        let fin = 0;
+
+        if(chars[0] = 45) {
+            let val = -val;
+            let fin = 1;
+        }
+
+        while(i > fin) {
+            let val = val + (chars[i] * exp);
+            let exp = exp * 10;
+            let i = i - 1;
+        }
+
+        return val;
     }
 
     /** Sets this string to hold a representation of the given value. */
     method void setInt(int val) {
-        var int curVal, nextVal, o;
-        let curVal = val;
-        let o = 10;
+        var int curVal, nextVal, pos, i;
+        let curVal = Math.abs(val);
 
-        let len = 0; // reset length
+        // 1. Represent integer as a 6 digit string
+        //    e.g. 1234 -> 001234, -12345 -> 012345
 
-        if (val < 0) {
-            let val = -val;
-            do appendChar(45);
+        let pos = 5;
+
+        while (~(pos < 0)) {
+            let nextVal = curVal/10;
+            let chars[pos] = (curVal - (nextVal * 10)) + 48;
+            let curVal = nextVal;
+            let pos = pos - 1;
         }
 
-        while (o < val) {
-            let nextVal = curVal/10;
-            do appendChar((curVal - (nextVal * 10)) + 48);
-            let curVal = nextVal;
-            let o = o * 10;
+        // 2. Append negative symbol to negative integers,
+        //    trim zeros from beginning of string,
+        //    update new string length
+        //    e.g. 001234 -> "1234", (neg)012345 -> "-12345"
+
+        let len = 6;
+        let pos = 0;
+
+        if (val < 0) {
+            let chars[0] = 45;
+            let pos = 1;
+        }
+
+        while (chars[pos] = 48) {
+            let i = pos;
+
+            while (i < len) {
+                let chars[i] = chars[i + 1];
+                let i = i + 1;
+            }
+
+            let len = len - 1;
         }
 
         return;
@@ -95,16 +137,16 @@ class String {
 
     /** Returns the new line character. */
     function char newLine() {
-        return 130;
+        return 10;
     }
 
     /** Returns the backspace character. */
     function char backSpace() {
-        return 130;
+        return 08;
     }
 
     /** Returns the double quote (") character. */
     function char doubleQuote() {
-        return 130;
+        return 34;
     }
 }
