@@ -22,6 +22,7 @@ class Screen {
         let screen = 16384;
         let color = true;
 
+        // @todo: use math lib
         let twoToThe = Array.new(16);
 
         let twoToThe[0] = 1;
@@ -46,6 +47,15 @@ class Screen {
 
     /** Erases the entire screen. */
     function void clearScreen() {
+        var int addr;
+
+        let addr = 0;
+
+        while (addr < 8192) {
+            let screen[addr] = false;
+            let addr = addr + 1;
+        }
+
         return;
     }
 
@@ -185,6 +195,16 @@ class Screen {
 
     /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
     function void drawCircle(int x, int y, int r) {
+        var int a, b, dy, w, r2;
+        let dy = -r;
+        let r2 = r*r;
+
+        while (~(dy > r)) {
+            let w = Math.sqrt(r2 - (dy * dy));
+            do Screen.drawLine((x - w), (y + dy), (x + w), (y + dy));
+            let dy = dy + 1;
+        }
+
         return;
     }
 }
