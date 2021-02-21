@@ -15,32 +15,10 @@ class Screen {
     static Array screen;
     static boolean color;
 
-    static Array twoToThe;
-
     /** Initializes the Screen. */
     function void init() {
         let screen = 16384;
         let color = true;
-
-        // @todo: use math lib
-        let twoToThe = Array.new(16);
-
-        let twoToThe[0] = 1;
-        let twoToThe[1] = 2;
-        let twoToThe[2] = 4;
-        let twoToThe[3] = 8;
-        let twoToThe[4] = 16;
-        let twoToThe[5] = 32;
-        let twoToThe[6] = 64;
-        let twoToThe[7] = 128;
-        let twoToThe[8] = 256;
-        let twoToThe[9] = 512;
-        let twoToThe[10] = 1024;
-        let twoToThe[11] = 2048;
-        let twoToThe[12] = 4096;
-        let twoToThe[13] = 8192;
-        let twoToThe[14] = 16384;
-        let twoToThe[15] = 32767 + 1;
 
         return;
     }
@@ -74,9 +52,9 @@ class Screen {
         let addr = (y * 32) + row;
 
         if (color) {
-            let val = screen[addr] | twoToThe[x - (16 * row)];
+            let val = screen[addr] | Math.twoToThe(x - (16 * row));
         } else {
-            let val = screen[addr] - twoToThe[x - (16 * row)];
+            let val = screen[addr] - Math.twoToThe(x - (16 * row));
         }
 
         let screen[addr] = val;
